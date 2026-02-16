@@ -10,18 +10,22 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-public static final int DEFAULT_TOTAL = 5;
-
 public class RandomAlbums {
+
+    public static final int DEFAULT_TOTAL = 5;
 
     public static void main(String args[]) {
         int totalAlbums = DEFAULT_TOTAL;
-        if (args.length >= 1) {
+        if (args.length < 1) {
+            System.err.println("Must provide path to music files");
+            System.exit(-1);
+        }
+        if (args.length >= 2) {
             try {
-                totalAlbums = Integer.parseInt(args[0]);
+                totalAlbums = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
-                System.err.println(args[0] + " is not a number");
-                System.exit(-1);
+                System.err.println(args[1] + " is not a number");
+                System.exit(-2);
             }
         }
         HttpClient client = HttpClient.newHttpClient();
@@ -29,7 +33,7 @@ public class RandomAlbums {
         // https://hyperblast.org/beefweb/api/
         sendRequest(client, "http://localhost:8880/api/playlists/p3/clear", "");
 
-        Path startPath = Paths.get("C:\\Users\\rprau\\Music");
+        Path startPath = Paths.get(args[0]);
         try (Stream<Path> stream = Files.walk(startPath)) {
             List<Path> albums = stream.filter(p -> p.toString().split("\\\\").length == 6).toList();
             List<Path> tracks = new ArrayList<>();
