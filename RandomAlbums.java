@@ -10,10 +10,12 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
+public static final int DEFAULT_TOTAL = 5;
+
 public class RandomAlbums {
 
     public static void main(String args[]) {
-        int totalAlbums = 5; // 10 is a good default IMO
+        int totalAlbums = DEFAULT_TOTAL;
         if (args.length >= 1) {
             try {
                 totalAlbums = Integer.parseInt(args[0]);
@@ -24,6 +26,7 @@ public class RandomAlbums {
         }
         HttpClient client = HttpClient.newHttpClient();
 
+        // https://hyperblast.org/beefweb/api/
         sendRequest(client, "http://localhost:8880/api/playlists/p3/clear", "");
 
         Path startPath = Paths.get("C:\\Users\\rprau\\Music");
